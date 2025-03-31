@@ -14,8 +14,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import pe.edu.upeu.navegationjpc.ui.presentation.component.MyAppDrawer
+import pe.edu.upeu.navegationjpc.ui.theme.DarkColorScheme
+import pe.edu.upeu.navegationjpc.ui.theme.LightColorScheme
 import pe.edu.upeu.navegationjpc.ui.theme.NavegationJPCTheme
 import pe.edu.upeu.navegationjpc.ui.theme.ThemeType
+import pe.edu.upeu.navegationjpc.ui.theme.sGreenDarkScheme
+import pe.edu.upeu.navegationjpc.ui.theme.sGreenLightScheme
+import pe.edu.upeu.navegationjpc.utils.conttexto
 import pe.edu.upeu.navegationjpc.utils.isNight
 
 class MainActivity : ComponentActivity() {
@@ -23,10 +28,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NavegationJPCTheme {
-                val themeType= remember { mutableStateOf(ThemeType.RED) }
-                val darkthemeX= isNight()
-                val darktheme= remember { mutableStateOf(darkthemeX)  }
+
+            val themeType= remember { mutableStateOf(ThemeType.RED) }
+            val darkthemeX= isNight()
+            val darktheme= remember { mutableStateOf(darkthemeX) }
+
+            conttexto.CONTEXTO_APPX=this
+            val colorScheme=when(themeType.value){
+                ThemeType.RED->{ if(darktheme.value) DarkColorScheme else LightColorScheme }
+                ThemeType.GREEN->{ if(darktheme.value) sGreenDarkScheme else sGreenLightScheme }
+                else->{LightColorScheme}
+            }
+
+
+
+            NavegationJPCTheme(colorScheme = colorScheme) {
                 MyAppDrawer(darkMode = darktheme, themeType = themeType)
 
                /* Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -53,7 +69,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    NavegationJPCTheme {
+    NavegationJPCTheme(colorScheme = sGreenLightScheme) {
         Greeting("Android")
     }
 }
