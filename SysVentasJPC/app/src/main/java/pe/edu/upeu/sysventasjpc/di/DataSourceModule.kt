@@ -37,9 +37,11 @@ class DataSourceModule {
         }
         return retrofit!!
     }
+
     @Singleton
     @Provides
     fun restUsuario(retrofit: Retrofit):RestUsuario{
         return retrofit.create(RestUsuario::class.java)
     }
+
 }
